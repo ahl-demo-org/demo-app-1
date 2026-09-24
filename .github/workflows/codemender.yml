@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
 
 jobs:
-  build-and-scan:
+  CodeMender-Scan:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -22,3 +22,9 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+  Another-Job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Hello World
+        run: |
+          echo "Hello World"
