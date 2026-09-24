@@ -11,6 +11,12 @@ jobs:
       id-token: write   # Required for the GCP auth inside your composite action
 
     steps:
+      - name: Checkout Target Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -23,12 +29,6 @@ jobs:
       
       - name: Install CodeMender
         uses: codemender-demo/cm-install@v0.1
-
-      - name: Checkout Target Repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
 
       - name: cm find
         uses: codemender-demo/cm-find@v0.1
