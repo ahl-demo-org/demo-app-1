@@ -17,14 +17,59 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: cm find
-        uses: codemender-demo/cm-find@v0.1
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-  Another-Job:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Hello World
+      - name: Update config.yaml with file types
+        shell: python
         run: |
-          echo "Hello World"
+          import os
+          import yaml
+  
+          config_file = '~/.codemender/config.yaml'
+          
+          # 1. Discover all unique file extensions, excluding .git
+          extensions = set()
+          for root, _, files in os.walk('.'):
+              if '.git' in root:
+                  continue
+              for file in files:
+                  _, ext = os.path.splitext(file)
+                  if ext:
+                      extensions.add(ext)
+  
+          # 2. Load existing config
+          if os.path.exists(config_file):
+              with open(config_file, 'r') as f:
+                  config = yaml.safe_load(f) or {}
+          else:
+              config = {}
+  
+          # Ensure the list key exists (assuming the key is 'file_types')
+          list_key = 'file_types'
+          if list_key not in config or config[list_key] is None:
+              config[list_key] = []
+  
+          # 3. Add new extensions
+          updated = False
+          for ext in extensions:
+              if ext not in config[list_key]:
+                  config[list_key].append(ext)
+                  updated = True
+  
+          # 4. Write back if changes were made
+          if updated:
+              with open(config_file, 'w') as f:
+                  yaml.dump(config, f, default_flow_style=False)
+              print(f"Updated {config_file} with new extensions.")
+          else:
+              print("No new extensions found.")
+
+      # Print the config file to check results
+      - name: Print config.yaml
+        shell: bash
+        run: cat ~/.codemender/config.yaml
+
+      # - name: cm find
+      #   uses: codemender-demo/cm-find@v0.1
+      #   with:
+      #     workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+      #     service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
