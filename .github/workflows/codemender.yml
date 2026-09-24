@@ -5,21 +5,8 @@ on:
 
 jobs:
   CodeMender-Scan:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      id-token: write   # Required for the GCP auth inside your composite action
-
-    steps:
-      - name: Checkout Target Repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: cm find
-        uses: codemender-demo/cm-find@v0.1
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+    uses: Codemender-Demo/cm-github-actions/.github/workflows/codemender.yml@main
+    secrets:
+      workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+      service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
