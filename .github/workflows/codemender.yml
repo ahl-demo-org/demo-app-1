@@ -19,3 +19,12 @@ jobs:
       
       - name: Insall CodeMender
         uses: codemender-demo/cm-install@v0.1
+
+      - name: Checkout Target Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: cm find
+        uses: codemender-demo/cm-find@v0.1
