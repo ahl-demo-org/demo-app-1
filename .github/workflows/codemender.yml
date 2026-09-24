@@ -16,8 +16,12 @@ jobs:
         with:
           workload_identity_provider: "${{ secrets.WIF_PROVIDER }}"
           service_account: "${{ secrets.WIF_SERVICE_ACCOUNT }}"
+
+      # Set up the gcloud CLI
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
       
-      - name: Insall CodeMender
+      - name: Install CodeMender
         uses: codemender-demo/cm-install@v0.1
 
       - name: Checkout Target Repository
