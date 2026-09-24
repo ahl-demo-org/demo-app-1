@@ -5,6 +5,9 @@ on:
 
 jobs:
   CodeMender-Scan:
+    permissions:
+      contents: read
+      id-token: write
     uses: Codemender-Demo/cm-github-actions/.github/workflows/codemender.yml@main
     secrets:
       workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
