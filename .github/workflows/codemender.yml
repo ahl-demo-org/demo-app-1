@@ -17,18 +17,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: "${{ secrets.WIF_PROVIDER }}"
-          service_account: "${{ secrets.WIF_SERVICE_ACCOUNT }}"
-
-      # Set up the gcloud CLI
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-      
-      - name: Install CodeMender
-        uses: codemender-demo/cm-install@v0.1
-
       - name: cm find
         uses: codemender-demo/cm-find@v0.1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
