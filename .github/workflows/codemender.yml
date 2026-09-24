@@ -121,9 +121,9 @@ jobs:
         shell: bash
         run: cat ~/.codemender/config.yaml
 
-      # - name: cm find
-      #   uses: codemender-demo/cm-find@v0.1
-      #   with:
-      #     workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-      #     service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      - name: cm find
+        uses: codemender-demo/cm-find@v0.1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
