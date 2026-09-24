@@ -104,7 +104,7 @@ jobs:
           # 3. Add new extensions
           updated = False
           for ext in extensions:
-              if ext not in config[list_key]:
+              if ext not in config['scan']['extensions'][list_key]:
                   config['scan']['extensions'][list_key].append(ext)
                   updated = True
   
