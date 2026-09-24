@@ -17,6 +17,60 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Fake Install CodeMender
+        run: |
+          mkdir -p ~/.codemender
+          cat << 'EOF' > ~/.codemender/config.yaml
+          server: {}
+
+          scan:
+            extensions:
+              include: [".py", ".java", ".go", ".js", ".ts", ".c", ".cc", ".cpp", ".h", ".rb", ".php"]
+              exclude: [".min.js", ".generated.go", ".pb.go"]
+            max_file_size_kb: 500
+            incremental: true
+
+          # Restrict agent file access to these directories (all commands).
+          # When empty, the scan target directory is used as the boundary.
+          # project_paths:
+          #   - "/path/to/project"
+          #   - "/path/to/shared-lib"
+
+          output:
+            format: table   # "table", "json", "sarif"
+
+          tools:
+            confirm_commands: true   # Prompt Y/N before running shell commands (default: true)
+            confirm_writes: true     # Prompt Y/N before writing/modifying files (default: true)
+            # Use --yes flag on find/fix/session resume to skip all confirmations
+
+          vcs:
+            type: ""               # VCS type: "git", "mercurial", "custom", or "" (auto-detect)
+            commands:
+              reset: ""            # Shell command to reset codebase (auto-populated for known VCS)
+              diff: ""             # Shell command to show changes (auto-populated for known VCS)
+              status: ""           # Shell command to list modified files (auto-populated for known VCS)
+              stage: ""            # Shell command to stage changes (auto-populated for known VCS)
+            # Known VCS types (git, mercurial) auto-populate commands.
+            # For custom VCS, you MUST set the commands above.
+            # Examples:
+            #   type: git           # uses: git checkout HEAD -- . && git clean -fd
+            #   type: mercurial     # uses: hg revert --all --no-backup && hg purge
+            #   type: custom
+            #   commands:
+            #     reset: "./scripts/reset.sh"
+            #     diff: "diff -rq baseline/ current/"
+            #     stage: "git add -A"
+
+          build:
+            command: ""              # Shell command to build/verify changes from the agent
+            # Examples:
+            #   Make:       "make build && make test"
+            #   Go:         "go build ./... && go test ./..."
+            #   Custom:     "./scripts/verify.sh"
+          EOF
+          
+
       - name: Update config.yaml with file types
         shell: python
         run: |
