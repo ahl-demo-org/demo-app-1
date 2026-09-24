@@ -97,15 +97,15 @@ jobs:
               config = {}
   
           # Ensure the list key exists (assuming the key is 'file_types')
-          list_key = 'file_types'
-          if list_key not in config or config[list_key] is None:
-              config[list_key] = []
+          list_key = 'include'
+          if list_key not in config['scan']['extensions'] or config['scan']['extensions'][list_key] is None:
+              config['scan']['extensions'][list_key] = []
   
           # 3. Add new extensions
           updated = False
           for ext in extensions:
               if ext not in config[list_key]:
-                  config[list_key].append(ext)
+                  config['scan']['extensions'][list_key].append(ext)
                   updated = True
   
           # 4. Write back if changes were made
