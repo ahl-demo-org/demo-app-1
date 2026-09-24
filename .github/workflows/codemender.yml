@@ -77,7 +77,7 @@ jobs:
           import os
           import yaml
   
-          config_file = '~/.codemender/config.yaml'
+          config_file = os.path.expanduser('~/.codemender/config.yaml')
           
           # 1. Discover all unique file extensions, excluding .git
           extensions = set()
